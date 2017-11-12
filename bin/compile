@@ -14,11 +14,16 @@ BPLOG_PREFIX="buildpack.nodejs"
 
 ### Configure directories
 
-BUILD_DIR=${1:-}
+BUILD_DIR="${1:-}client"
+echo "Build Dir: " $BUILD_DIR
 CACHE_DIR=${2:-}
+echo "Cache Dir: " $CACHE_DIR
 ENV_DIR=${3:-}
+echo "Env Dir: " $ENV_DIR
 BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+echo "BP Dir: " $BP_DIR
 STDLIB_FILE=$(mktemp -t stdlib.XXXXX)
+echo "Std Lib File: " $STDLIB_FILE
 
 ### Configure package manager cache directories
 [ ! "$YARN_CACHE_FOLDER" ] && YARN_CACHE_FOLDER=$(mktemp -d -t yarncache.XXXXX)
@@ -111,10 +116,15 @@ install_bins() {
     echo "Using bundled npm version for iojs compatibility: `npm --version`"
     mcount "version.iojs.$(node --version)"
   else
+    echo "Test 1"
     warn_node_engine "$node_engine"
+    echo "Test 2"
     install_nodejs "$node_engine" "$BUILD_DIR/.heroku/node"
+    echo "Test 3"
     install_npm "$npm_engine" "$BUILD_DIR/.heroku/node" $NPM_LOCK
+    echo "Test 4"
     mcount "version.node.$(node --version)"
+    echo "Test 5"
   fi
 
   # Download yarn if there is a yarn.lock file or if the user
